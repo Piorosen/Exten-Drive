@@ -1,0 +1,1278 @@
+﻿2016년 1월 23일
+	프로젝트 제작 착수.
+	프로젝트 미지정 : Tmp Project (Prizm Drive)
+	Library.Log 개발 착수
+
+	Log 내부 기능
+		단점. Prepare을 하지 않는한 프로그램이 오류를 발생합니다.
+
+		File에 출력합니다.
+		Regstry에 출력합니다.
+		현재 이 프로그램이 관리자 권환으로 실행 유무를 판단합니다.
+
+
+2016년 1월 24일
+	기존에 개발했던 코드를 본 프로젝트에 적용합니다.
+	{
+		AES256 클래스
+		ControlMove 클래스
+		ControlForm 클래스
+		GetMacAdress 클래스
+		Ini 클래스 -> Option 클래스에 병합.
+	}
+
+	프로그램 UI
+		\\사진자료\\Picture 1.png
+		
+	Option 클래스 개발시작
+	Option 내부 기능
+		private static Hash
+
+	AES 256 클래스 구조 변경
+		AES256에서 오류 발생시 Log 기록 에러코드 0, 이유 : Exception.ToString()
+
+	Initialize 클래스 생성
+
+2016년 1월 25일
+	Library.Administrator.cs 파일 생성
+	어드민 계정 확인 하는 기능을 분활 했습니다.
+	기존의 코드 : try {}catch{}를 이용해 IOException 을 이용해 관리자 권한을 판단함.
+	바뀐 코드 : 현재 계정이 어드민인지와 프로그램이 어드민인지 판단함.
+
+2016년 1월 26일
+	Library.Option 개발
+		상당히 많이 개발했고 상당히 많이 구현을 했는데 ㅠㅠ
+		초반에 생각없이 구현한 탓에 사후 처리가 망함...
+		그래서 Option 클래스를 삭제후 다시 제작 처리 하기로함.
+		이번엔 Ini 클래스를 의존하지 않고 StreamWriter과 Split를 의존하기로함.
+
+
+2016년 1월 27일
+	Library.Option 개발 시작
+		Change, SetConfig, GetConfig로 각각 구현
+		( 아직 구현 된게 아님. )
+		Option의 개발 스펙을 정함.
+
+		하지만 Option 개발 도중 문제점을 발견함.!!
+		그래서 Option 파괴하고 ini를 이용을 할 예정임.
+
+2016년 3월 5일
+	Log 기능 스펙대로 수정 시작
+	Log 기능 추가 AES256 을 사용가능하게 수정
+	AES256의 키코드는 약 4000자 이며 빅엔디안 문자이므로 프로그램 개발환경 변경
+	한글 -> 유니코드 빅엔디안으로 변경
+
+	AES256 클래스 수정
+		생성자 클래스를 총 2개 제작을 함.
+			1. Key값을 바로 초기화 하는경우
+			2. Key값을 주지않고 기본값으로 하는경우
+		이렇게 총 2가지가 있음.
+
+	현재 프로그램을 실행할때 관리자 권한을 묻지도 않음.
+	관리자 권한이 없으면은 Log 기능, Option 기능, 파일목록 저장기능 같은 기능을 이용하지 못하므로
+	app.manifest 에 
+	<requestedExecutionLevel  level="asInvoker" uiAccess="false" /> 코드를
+    <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" /> 로 변경함
+
+2016년 3월 6일
+	Option 라이브러리 개발 시작.
+		ini 코드를 이용을 해
+		Option 라이브러리를 개발합니다.
+
+	Log 개발 완료 한가지 문제점이 있다면은
+		날짜를 조금 보기 어렵겠지만은 로그 분석툴을 이용을 할 것이므로 크게 문제는 없을 것이라 예상됌
+
+	Option 부분 개발 완료
+		최종 결과 : INI 코드를 이용 해서 쉽게 사용, 쉽게 이름을 지어줌.
+
+
+2016년 3월 10일
+	폴더 구조 세분화
+	
+	[] 는 폴더
+	() 는 클래스임
+	[Root]
+		[Library]
+			[Colud]
+				(RAIDHard)
+				(RAIDManager)
+				[Cloud]
+					(Manager)
+					[DropBox]
+						(DropBox Download Manager)
+					[Google]
+						(Google Download Manager)			
+			[Console]
+			[Form]
+				(ControlMove)
+			[Init]
+				(Initialize)
+			[File]
+				(Log)
+				(Option)
+				[Log Error]
+					(Error Code)
+			[Security]
+				(Administrator)
+				(AES256)
+				(GetMacAdress)
+
+	라이브러리 코드는 총이렇게 전개 되어있음.
+
+	RAIDHard와 RAIDManager의 차이점은 유저가 직접 레이드를 구성할수 있게끔 해주는 툴임.
+	Console 폴더는 아직까지 전문가용으로 추가할 생각으로 넣어둠 콘솔은 프로그램자체를 변경이 가능함.
+
+2016년 3월 12일
+	Material Design 으로 폼을 구성을 함..
+	Develop 폴더에 라이센스 폴더와 참고문헌을 새로 추가함.
+
+	프로그램 중복 실행 금지 개발중..
+		이유 :	중복으로 실행이 만약 가능하다면은 구글드라이브 업로드, 다운로드, 파일 삭제 등등이
+				이루어질 경우에 프로그램이 꼬이고, 문제가 생길 가능성이 높으므로. 중복 방지를 함..
+
+				Mutex를 사용하지 않고 MemoryMappedFile을 이용해 방지를 함.
+				참고문헌 참조.
+
+	Library.NetWork.WebServer 코드 작성 시작
+		Property를 이용해서 수정권한 조정
+		CheckVersion 코드 작성 코드를 작성을 하고 버전 확인은 동기
+		업데이트 파일을 다운로드 할때는 차후 용량 생각을 하며 비동기로 작성함
+
+		프로그램 업데이트가 어떻게 진행이 되는지 로그 작성 그리고 오류 뜰시 해결책 작성
+		만약 업데이트가 되었을 경우에는 업데이트 파일을 실행, 구버전 종료, 신버전에서 구버전 프로그램 삭제.
+
+		프로그램 내부 보안 프로그램 작성 시작.
+			개발했던 프로그램 설명 => USB 보안프로그램, 화면보호기 프로그램
+
+		업데이트 되었을 경우 변경
+			업데이트 파일 실행, 구버전 종료 로 끝내겠습니다.
+			구버전 프로그램을 삭제 하지 않고
+			그대로 두겠습니다. 하지만 실행은 안되게 변경을 하겠습니다.
+
+		WebServer은 직접적으로 서버를 운용이 불가능할 경우, 서버가 오류가 났을 경우에 대비해서
+		위험하지만... 이렇게 하는 방법도 있습니다.
+
+	그리고 NetWork 폴더 안에
+	TCP-IP 폴더도 있는데 이것은 서버가 있을 경우에 쓰이는 클래스 입니다.
+	아직까진 개발할 생각은 없습니다.
+
+	본격적으로 프로그램 중복 실행 금지 개발
+		
+
+2016년 3월 13일
+	본격적인 프로그램 개발 시작.
+
+	폼 디자인
+		: 역시 그대로 라이센스 MaterialDesign에 있는 라이센스를 이용을 할것임.
+		: 주어진 라이브러리에 없는 코드는 직접 제작할 예정.
+
+	내부 코드구현
+		: 현재 코드는 클라우드, 콘솔, 파일, 폼, 초기화, 업데이트, 보안 이렇게
+		: 구현 되어있고. 콘솔은 프로그램 전부다 개발한 후에 추후 업데이트 요으로 개발할 생각.
+		: 프로그램 기본적인 스펙은 지금 현재 로는 아래에 있는 [개발 스펙 : ] 참조 바람.
+		:
+		: 현재 자동업데이트, 옵션, 설정, AES256, 고유번호 가져오기, 폼 디자인용 등 을 구현함.
+		: 그리고 핵심코드인 Google Drive 나 DropBox는 아직까지 구현하지 않음.
+		: 하지만 구글 드라이브 에서는 파일목록 가져오기를 성공하였음.
+		: 그러나 단일 파일 다운로드는 되나
+		: 폴더 째로 다운로드에는 크게 문제가 발생함.
+		: (어차피.. 폴더를 다운보다.. 단일 파일 다운로드가 가장 좋을것 같기도 하고..)
+
+	개발 스펙 : 
+		1. 자동업데이트 기능
+		2. 클라우드 레이드 구성 기능
+		3. 콘솔 기능
+		4. MainForm을 유저가 직접, 대부분을 수정 가능하게 할 예정 (ex. 글자색, 배경색, 문자열, 등등 자체를 수정이 가능하게 할것.)
+		( 보안 문제도 생길것 같긴하나.. 특정 부분은 제한을 둘것임. )
+		
+		지금 현재는 이와 같은 개발적인 스펙으로 이어갈 예정임.
+
+
+2016년 3월 18일
+	구글 드라이브를 모아서 사용할 계획은 실패로 될것은 같으나.
+	주 목표가 구글 드라이브였기에 구글 드라이브는 포기 하지 않겠습니다.
+		실패로 돌아갈뻔한 사유
+			구글드라이브 API를 사용하기 위해서는 https://www.youtube.com/watch?v=iK14bfd6qhs 와 같이
+			유저가 직접 구글 개발자 콘솔에 들어가 구글 드라이브 API를 사용함을 허용한뒤. 파일을 다운받아야 합니다.
+			하지만 이 행위는 사용자에게는 크나큰 치명적인 "귀찮음"과 "불편함"이 존재 합니다. 그러나
+			구글 드라이브는 아직까지 스마트폰으로 계정을 무한정으로 만들수가 있으므로 포기하지 않겠습니다.
+
+			ps. 프로그램으로 직접 유저가 인증할순 없을까? 생각을 했지만은 역시 자료가 없어 포기 했습니다.
+
+			그리고 클라이언트 ID를 잃어 버렸을 경우 큰 문제 이므로 독자적으로 파일을 읽은후 다른 파일에 저장 + 암호화
+			처리할 생각입니다. RSA2048, AES256과 같은 고성능의 암호화 알고리즘을 사용할 생각입니다.
+
+
+	프로그램 이름을 임시적으로 정했습니다.
+		Extensa Drive
+			의미 : 스페인어와 라틴어의 뜻으로는 광대하고 무한히 확장되는 드라이브 라는 의미를 가졌습니다.
+			발음을 할땐 익스텐사 드라이브 입니다.
+		바로 다운로드 링크 :
+			https://translate.google.co.kr/translate_tts?ie=UTF-8&q=extensa&tl=la&total=1&idx=0&textlen=7&tk=864015.721223&client=t&prev=input&ttsspeed=0.24
+			https://www.dropbox.com/s/3usyrppzgiz17iw/translate_tts.mp3?dl=1
+
+	구글드라이브 기능 개발에 대한 글
+		구글드라이브는 어쩔수없이 클라이언트 ID값을 가져와야하고
+		그 값을 가져오기 위해서는 직접 유저가 가져와야한다는 단점이 존재한다.
+		그러므로 GoogleDrive 클래스에 직접 유저가 가져오기 편하게 라이브러리를 작성하고,
+		가이드 라인이 존재하는 클래스를 만든다.
+
+2016년 3월 19일
+	블로그를 개설을 해 프로그램 개발 일지가 정확도를 올릴려고 합니다.
+
+	아이디어 추가 :
+		1. 서버를 구축을 합니다.
+		2. 서버 안에 클라우드 계정을 저장합니다.
+		3. 유저가 서버에 클라우드 계정을 추가할수 있도록 합니다.
+		4. 유저가 많으면 많을수록 클라우드의 용량은 엄청나게 커지게 될것이며. 파일또한 많아지게 될것입니다.
+			그렇게 되면 ﻿엄청난 하나의 클라우드가 탄생됩니다.
+		5. ex) A유저가 100gb 의 클라우드를 서버에 올렸을 경우 다른 유저가 A의 클라우드에 다른 데이터 저장, 삭제가 가능합니다.
+		6. 서버 클라우드는 레이드 0 을 유지합니다.
+
+	2016년 3월 10일에 작성한 기준으로
+		폴더 구조 세분화
+		[] 는 폴더
+		() 는 클래스임
+		
+		프로그램 내부 조정
+
+		[Root]
+			[Library]
+				[Cloud]
+					(RAIDHard) -> 삭제
+					(RAIDManager) 유지
+					[Cloud]
+						(Manager) -> (RAIDHard) -> 이름변경
+
+	구글 드라이브 본격적인 개발시작 합니다..
+		이전에 개발하지 못했던이유 :
+		구글 드라이브에서.. 오직.. p12 나 .json 만 존재하고... 프로그램 내부에서 계정만 던져주면
+		바로 적용이 될줄 알았으나... 불가능하다는것을 알았기에... 이제 개발을 시작합니다...!!
+
+2016년 3월 21일
+	이전글에 개발스펙에 쓰여지지 않았지만은..  옛날부터 생각해 왔던것이 하나 있습니다.
+	
+	ProgramLoadForm 이라는 폼이 새롭게 추가되었습니다.
+
+	기존 Program.cs 파일에서 바로 MainForm 을 실행을 했으나 이제는
+	ProgramLoadForm 에서 유저가 변경한 데이터값이나, 로그인, 서버 인증 등 여러가지 작업을 하고 난뒤
+	MainForm을 실행 시킵니다.
+
+	아직까진 구상단계입니다. 작성 되지 않았습니다...
+
+2016년 3월 23일
+	본 프로그램을 다른 PC에서 실행을 한뒤 프로그램을 실행시켜보았습니다..
+	그 결과 매우 흥미로운 결과가 나왔습니다.
+
+
+	https://www.dropbox.com/s/gtmo37z9xo40uch/%EC%BA%A1%EC%B2%98.PNG?dl=1
+	https://www.dropbox.com/s/9d4qag2m3a3f7up/%EC%BA%A1%EC%B2%982.PNG?dl=1
+
+	이와 같이 웹페이지로 이동을 한뒤 Auth 를 요청을 합니다.
+	그 다음 파일이 저장되는것 으로 판별이 되었고 저는 그 동안 큰 착각을 하고 있었습니다.
+
+	본 Extensa Drive 프로그램은 여러개의 클라우드 시스템을 하나로 묶어 쓸수 있습니다.
+	
+	이 프로그램의 클라우드 계정 관리 방식은
+
+	(프로그램의 해쉬)
+		(프로그램 내부 로그인 기능)
+			(레이드 기능)
+				(수없이 엮인 클라우드 계정 [통칭. 하드디스크])
+					(1개의 클라우드 계정)
+
+	이렇게 될것 입니다.
+
+	프로그램의 개인 해쉬값을 이용하여 서버에 접근을 하고,
+	내부 로그인 기능을 이용해 한 프로그램에 계정을 만들어 계정 관리를 더욱 간단히 할수도 있습니다.
+
+	여기서 핵심적인 부분은 바로
+	수없이 엮인 클라우드 계정(하드디스크) 를 만들어 자기 자신이 직접 레이드 구성을 할수가 있다는 것 입니다.
+
+	즉 유저가 직접 하드디스크를 만지는 듯한 느낌을 주고, 특정 하드에는 어떤것을 넣고 안넣고 조절이 가능합니다.
+
+	마지막으로 (1개의 클라우드 계정) 부분에서 클라우드 마다 규칙이 다 다른데, 규칙을 벗어나기 위해서는 반드시 이
+	클라우드 시스템에 넣어야만 할 경우에 직접적으로 넣을수도 있습니다.
+
+
+2016년 3월 26일
+	이제 리소스 파일에 구글의 Json 파일을 넣었습니다.
+	만약 파일이 없을경우 리소스를 읽어서 적용합니다.
+	
+	이번 구글드라이브에 대해서 개발하던 도중에 한가지 문제점을 발견했습니다.
+	구글드라이브에서 OAUTH 인증 받고, 사용을 할려면은 반드시
+	Google.Apis.Auth.OAuth2.Responses.TokenResponse-user 라는 특정한 이름으로 되어있어야지만
+	가능합니다.
+	이 이름으로 안되어 있을시 새롭게 Oauth 인증 시도를 하므로..
+	
+	파일이름을 바꾸고 새롭게 인증을 받고, 인증이 성공적으로 되었을 경우
+	다시 이름을 바꾸는 방식으로 택하였습니다.
+
+	파일 다운로드 기능을 구현했습니다.
+	자료 출처 : https://developers.google.com/drive/v3/web/quickstart/dotnet
+
+	구글 드라이브 파일 목록을 가져오고, 가져온 파일을 이젠 다운로드를 가능합니다.
+	
+	https://www.dropbox.com/s/1dunvbyc891ug4i/%EC%BA%A1%EC%B2%98_2016_03_26_14_13_10_781.png?dl=1
+
+	위 사진은 베타버전 입니다.
+
+	베타버전 테스트 요청을 하여 베타테스트를 하였습니다.
+	베타 테스트 해주 신분 : LLHH님.
+	네이버 블로그  : http://blog.naver.com/wlsfjqm1778
+
+	버그 수정 된점 : 
+	https://www.dropbox.com/s/avxs4xde6i7n2im/Image%2069.png?dl=1
+
+
+	이와 같은 버그가 존재했습니다.
+
+	이런 버그의 이유는 프로그램을 젤 처음 실행 했을때
+	private void Form1_Load(object sender, EventArgs e)
+        {
+            DirectoryInfo c = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + Properties.Resources.ProgramName);
+            
+            FileInfo[] a = c.GetFiles();
+            foreach (var file in a)
+            {
+                if (file.Name != "Google.info")
+                {
+                    listBox1.Items.Add(file.Name);
+                }
+            }
+        }
+
+	이렇게 코드가 작성되어 있었기 때문입니다.
+
+	여기서 에러가 난 이유는 바로 폴더가 폴더가 존재 유무를 따지지 않은채 파일을 가져올려고 했기에 이런 일이 발생한겁니다.
+
+	그래서
+	if (!c.Exists)
+    {
+		c.Create();
+		return;
+    }
+	이런 코드를 작성하였습니다.
+	
+	현재 이렇게 파일을 다운로드 및, 다운로드 기능이 정상적으로 진행이 됩니다.
+	https://www.dropbox.com/s/tjcb6blvaenrq7a/%EC%BA%A1%EC%B2%98_2016_03_26_12_44_25_786.png?dl=1
+
+
+	그리고 지금 현재 구글 드라이브의 레이드 작업을 하여 하드 디스크 처럼 작동하게끔 개발 할 생각입니다.
+
+	아직 까지는 업로드 기능과 파일 Path 를 정확하게 가져 오지 못하였으므로. 폴더 정리를 하는건 아직까지 불가능합니다.
+
+	현재 버전의 명칭을
+	Google Drive Download Beta Version 이라고 칭하였습니다.
+
+2016년 4월 3일
+	혁신적인 아이디어의 발전
+	
+	구글드라이브에 관련된 문서를 거의 다 익혀 프로그램 개발에 큰 기여를 하였습니다.
+	참고문헌 1.1 참고.
+
+	그리고 본 프로젝트의 클라우드 레이드 작업은 이와같이 진행이 됩니다.
+
+	레이드
+		하드디스크
+			구글드라이브
+				루트 폴더
+					내부 폴더
+						파일 목록
+
+	
+	내부적으로 하드디스크나, 클라우드를 관리를 할때는
+	개인 키 값을 지정해 주어 원할때 얻을수 있게끔 관리합니다.
+	
+	기존 Google.Info 파일을 제거를 합니다.
+	var stream = new FileStream("Google.info", FileMode.Open, FileAccess.Read)
+	란 코드를
+	credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+	이런 코드를 다음과 같이 바뀌었습니다.
+
+	credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    new ClientSecrets { ClientSecret = Secret, ClientId = Id },
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+
+	이렇게 변경이 되었습니다.
+
+2016년 4월 6일
+	Google Drive File을 생성했습니다.
+		public string FileName { get; private set; }
+		public string DownloadUrl { get; private set; }
+		public string ThumbnailUrl { get; private set; }
+		public long? Size { get; private set; }
+		public string Id { get; private set; }
+		public string Title { get; set; }
+		public DateTime? CreatedDate { get; private set; }
+		public DateTime? ModifiedDate { get; private set; }
+		public string FileType { get; private set; }
+		public bool IsTrashed { get; private set; }
+
+		Google Drive File을 GoogleFile라 칭하겠습니다.
+	
+	GoogleFolder 를 추가했습니다.
+		List<GoogleFile> Files = new List<GoogleFile>();
+        List<GoogleFolder> Folders = new List<GoogleFolder>();
+
+		public string FileName { get; private set; }
+        public string Path { get; private set; }
+        public string Id { get; private set; }
+        public string Title { get; private set; }
+        public bool IsTrashed { get; private set; }
+        public DateTime? CreatedDate { get; private set; }
+        public DateTime? ModifiedDate { get; private set; }
+        public string ParentId { get; private set; }
+
+	Google Drive Folder을 GoogleFolder 이렇게 정의 했습니다.
+
+	메터리얼 디자인 적용후 Beta 버전 릴리즈 준비중
+	참고사항 : 참고문헌 1.0 그리고 Develops\라이센스\Material Design\LICENE 참조
+
+	그리고 내일은 GoogleDrive.cs 파일 생성
+
+	이 파일에서 본격적으로 GoogleFile, GoogleFolder를 이용해 파일정리, 유저 정보 가져오기등
+	이 클래스가 구글 드라이브 1개를 완벽하게 통재할 생각.
+	즉 List<GoogleDrive> 할 경우 드라이브 복수 사용가능함.
+
+2016년 4월 9일
+	구글드라이브 메인코드 개발시작
+	기존 베타버전 코드 삭제후 새로 작성임.
+
+	혁신적인 대폭.. 적인.. 발전...
+
+	 GoogleDrive 내부 소스코드 변경된점..
+	 (솔직히 전 코드 보다 엄청 발전했지만..)
+
+	 GoogleDrive 내부 함수 목록
+		GetDriveAuth();
+		SetDriveAuth();
+		GetDrive();
+		GetRootID();
+		Google.Apis.Drive.v2.Data.File GetFile(string id);
+		GetFolderList(string Path = "Root", string ID = "Root");
+		List<Google.Apis.Drive.v2.Data.File> GetFiles(string Path, string id);
+		GetFileList();
+
+	개발 시도 1.
+		클라우드 내부 폴더, 파일 관리는
+		리눅스 폴더 구조를 따왔습니다.
+		Root 가 젤 처음 접근 주소 입니다.
+
+		그래서 GOogleDrive 내부 함수 목록중에 GetRootID가 존재합니다.
+
+		그리고 Root 폴더 안에 있는 폴더는 Root\[Title]
+		이렇게 존재합니다.
+
+		Root 폴더 ID 값을 구한뒤
+		내부 파일, 폴더를 GoogleFile, GoogleFolder에 따로 저장.
+		그 다음 GoogleRoot 파일에 저장합니다.
+		
+		GoogleRoot란 클래스는 GoogleFile과 GOogleFolder에 저장합니다.
+
+		string GetRootID()란 함수를 이용해
+
+		클라우드의 RootID를 가져와 파일, 폴더 목록을 가져온뒤,
+		Root란 폴더를 GoogleRoot에 Path가 키값, GoogleFile, GoogleFolder가 데이터 값으로
+		HashTable로 지정 했습니다. 
+		
+		그 다음 List<Google.Apis.Drive.v2.Data.File> GetFiles(string Path, string id);
+		란 함수를 이용해 모든 파일, 모든 폴더 목록을 가져옵니다.
+		ChildrenResource.ListRequest 를 이용합니다.
+
+		참고문헌 1.1 을 이용해 탐색기를 구현을 했습니다.
+
+		(단점. 초당 파일 2개씩 로드를 하는 엄청나게 속도가 느렸습니다.
+			그리고 ChildrenResource.ListRequest 를 이용을 하게 되면은 내부 파일 목록의
+			아이디 값만 주기 떄문에
+			Google.Apis.Drive.v2.Data.File GetFile(string id)
+			를 이용해 File 이란 값을 가져와야 합니다.
+		)
+
+		그래서 다시 새롭게 개발을 하였습니다.
+
+	이번엔 참고문헌 1.1을 이용하지 않고 참고문헌 1.2와 1.1를 이용해
+	개발을 해 보았습니다.
+
+	참고문헌 1.2 참고.
+		'폴더아이디' in parents 를 이용해 특정 폴더를 정할수 있다는 것을
+		판단 했습니다.
+
+		void GetFolderList(string Path = "Root", string ID = "Root")
+		란 함수를 이용해
+
+		모든 폴더를 가져옵니다.
+		내부 코드는
+		string FolderID = ID;
+            if (Path == "Root")
+            {
+                FoldList[Path] = GetRootID();
+                FolderID = GetRootID();
+            }
+
+			를 이용을 합니다.
+			즉 GetFolderList(); 를 하면 됩니다.
+
+			그리고 
+			foreach (var File in Files)
+            {
+                if (File.MimeType == GoogleMimyType.Folder)
+                {
+                    FoldList[Path + @"\" + File.Title] = File.Id;
+                    GetFolderList(Path + @"\" + File.Title, File.Id);
+                }
+            }
+			FoldList는 HashTable 입니다.
+		란 코드를 이용해
+		
+		재귀함수를 이용해 모든 폴더를 가져옵니다.
+		즉 Path 값만 던져 주게 되면 바로 폴더 아이디 값이 나오게 되고
+		그 아이디를 이용해 바로 파일 목록을 가져오면 완성이 됩니다.
+
+		https://www.dropbox.com/s/4w2tisitamnm5q3/%EB%85%B9%ED%99%94_2016_04_09_23_34_08_974.mp4?dl=1
+		본 최신본의 실행본입니다.
+
+2016년 5월 7일
+	구글 파일목록을 저장하기 위해
+	생성된 GoogleSave.cs파일
+	파일저장형식은 ini.cs 파일을 이용해 작업합니다.
+	1차 아이디어:
+		[계정 소속사]
+		Account ID
+     
+		[레이드 소속사]
+		Raid ID
+     
+		[하드 소속사]
+		[Hard ID
+     
+		[클라우드 종류]
+		Cloud ID
+     
+		[Path List]
+		List...
+		 
+		[Root\~~\~~]
+		id
+
+	2차 아이디어:
+		[소속사]
+		Account ID
+		Raid ID
+		Hard ID
+		Cloud ID
+     	List...
+		 
+		[Path]
+		id=Root|Root\~~\~
+
+
+	아이디어 변경 3차 아이디어
+		[소속사]
+		소속사는 이전과 동일함.
+
+		하지만 Path 부분이 달라짐.
+
+		Ini 코드를 그대로 이어 쓰기 위해서는
+		이전에 GoogleDrive 코드에서 GetFolderList()
+		처럼 이용하기로 했습니다.
+
+		그러므로
+		[Root]
+		ID=[Folder ID]
+		Node1=[다음 폴더 ID]
+		Node1_Name=[다음 폴더 이름]
+
+		[Root\[다음 폴더 이름]]
+		ID=[Folder ID]
+		Node1=동일.
+
+		이렇게 하기로 정의를 하기로 하였습니다.
+
+	아이디어 변경 4차 아이디어.
+		소속사를 삭제 하였습니다.
+
+		파일들은 이렇게 관리가 됩니다.
+
+		[HardInfo.inf]
+			[소속된 파일들의 목록, 정보]
+
+		[계정이름.ini]
+			[Root]
+				이전과 동일.
+
+		이렇게 하드와 계정을 따로 분리를 하여
+
+		프로그램은 레이드란 파일을 제일먼저 읽고, 하드 목록 파일을 읽은뒤
+		계정을 읽음 으로써
+
+		좀더 수월하고 체계적으로 파일을 읽을 것입니다.
+
+
+2016년 5월 12일
+	아이디어 5차 수정
+		이전것은
+		[계정이름.int]
+			[Root]
+			ID=[Folder ID]
+			Node1=[다음 폴더 ID]
+			Node1_Name=[다음 폴더 이름]
+
+			[Root\[다음 폴더 이름]]
+			ID=[Folder ID]
+			Node1=동일.
+
+		이러 하였지만..
+		개발 도중 수정을 하였습니다.
+
+		어차피 HashTable에서 Key값, 즉 Path 값 가지고만 파일 목록을 가져오니
+		쓸데없는 용량을 차지 할 필요 없이.
+
+		[Root]
+		ID=폴더 아이디
+
+		이렇게 구현을 하였습니다.
+
+	아이디어 6차 수정.
+		ini 사용 금지. 대신 새롭게 클래스를 작성하여
+		사용 하기로 결심.
+
+		클래스 :
+		Libarary.File.gDrive
+		구글드라이브 전용의 파일 저장 보조 클래스 입니다.
+
+	계정을 파일 1개로 대체하자 프로젝트 시작.
+		개발 스펙 : 
+			\Extensa 에는 계정의 정보가 들어있습니다.
+			\Extensa\Drive\Account\ 에는 구글드라이브의 파일 경로와 파일 ID 가 들어있습니다.
+
+			원리 : 
+				Extensa에 있는 파일을 읽어 Service를 등록,
+				그 다음 Drive\Account에 있는 파일을 로드 합니다.
+
+				그렇게 함으로써 모든 파일을 손쉽게 읽어 버립니다.
+
+				전에는 네트워크에서 폴더 목록을 재귀로 돌려
+				모든 폴더를 가져왔지만 이번에는
+				네트워크에서 모든 폴더 목록을 단 1번 가져와
+				가져온 자료를 Drive\Account 에 저장을 시킵니다.
+
+			이 것이 중요한 이유 : 
+				전에 같았으면 폴더 목록이 많으면 많을수록 로딩 속도가 기하급수적으로 느려짐을 확인 할수 있었지만.
+				이 기술을 이용을 하게 되면 딱 한번 계정을 등록할때만 오랜 시간동안 로딩을 합니다.
+				그 후로는 로딩 속도는 10ms 이하로 로딩을 할수가 있습니다.
+
+		개발 시작 : 
+			로그 : 
+				GoogleSave.cs 파일 생성.
+				아이디어 5차로 개발 시작.
+				그러나 ini의 특성상 Key 값을 알아야지만 그 해당 Value를 가져 올수가 있다는 한계에 도달.
+
+				GoogleSave.cs 파일 삭제.
+
+				Library.File.gDrive 파일 생성.
+				아이디어 6차로 새롭게 개발 시작.
+
+				새로운 파일 구성을 개발 하기로 마음 먹음.
+
+				파일 내부 구조 :
+					Root=SJAJQIWS
+					Root\[Folder]=JSIDJ382
+
+					와 같은 구조 로 개발 하기 시작.
+
+					SW.WriteLine(obj.ToString() + "=" + List[obj])
+					와 같이 출력을 시도함.
+
+					그렇다면 읽을떈 어떻게 읽는가?
+
+					string[] Tmp = SR.ReadLine().Split('=');
+                    List[Tmp[0]] = Tmp[1];
+
+					같이 =를 기준으로 파일을 저장합니다.
+
+				개발 하던 도중 한가지 문제점에 도달.
+				
+				파일 경로를 "Extensa\Drive\" 와 같이 직접적으로 주다 보니
+				관리하기 힘들어짐.
+
+				Library.Global 네임스페이스 추가,
+				Library.Global.Global.cs 파일 생성..
+
+				static으로 구현.
+				public readonly static String DriveAccount = ProgramPath + @"Drive\Account\";
+				와 같이 폴더 주소를 한번에 일괄 변경이 되도록 변경 하였습니다.
+
+				개발완료.
+
+				하지만 추가적으로 개발할 가능성이 존재함.
+
+				아직 gDrive에 계정의 속성을 입력하지 않았습니다.
+				추후 추가할 생각입니다.
+
+	하드 매니저 개발 시작 : 
+		개발원리 :
+			gDrive와 동일
+
+			파일 구조 : 
+				gDrive와 유사 하지만.
+				[계정 아이디]=[드라이브 이름]
+
+				Ex)
+				ckwngud1=GoogleDrive
+				aoikazto=DropBox
+				이와 같이 진행됌.
+
+				GoogleDrive나 DropBox같은 것은
+
+				클래스 Global에 변수로 저장됌
+
+				HardManager.cs 파일은 단순히
+				
+				계정 목록을 가져오는 역활을 하고
+
+				실제로 레이드나 그러한 작업은
+				Library.Cloud.RAIDHARD.cs 에서 작업을 합니다.
+
+	본 Hard Manager 와 gDrive를 파기하고 하나로 묶습니다.
+
+	그리고 클래스 이름을 변경합니다.
+		AoiFile로 변경하였습니다. 이 클래스 이름은 언제든지 변경이 될 가능성이 있습니다.
+		
+	지금 까지 개발한것중 하드를 레이드는 아직까지 불안정하여 제거 한것 까지의 프로그램의 현 상태를 알려드립니다.
+	https://www.dropbox.com/s/e4p29d781nj8bhs/%EB%85%B9%ED%99%94_2016_05_08_11_38_49_504.mp4?dl=1
+
+	이와 같이 위의 AoiFile에서의 파일읽기를 통해 계정을 읽기를 대체해 속도가 전보다 약 수백배가 빨라졌습니다.
+
+	전에 공지했던것 처럼 말이죠 하하!
+
+
+2016SUS 5월 21일
+	1차 베타 테스트 프로그램 개발 시작
+		https://www.dropbox.com/s/3r9814m5tcgkhve/%EC%BA%A1%EC%B2%98_2016_05_21_00_17_19_127.png?dl=1
+
+		1차 베타의 디자인은 이와 같습니다.
+
+		GoogleDrive.cs 파일에서 생기한 한가지 버그 였던것중 1개를 해결 하였습니다.
+			버그 : 사용하다보면 갑작스럽게 GetDrive()와 SetDrive() 코드가 제대로 작동하지 않았던 문제점이 있었습니다.
+				그 버그를 해결 하기 위해 필요없는 GetDrive, SetDriev를 지웠습니다. 그 결과 Service, 단 한번만 Get,SetDrive하면 모든것이 해결이 됩니다.
+
+		1. 클라우드 레이드를 성공하였고, 계정 추가는 이미 전에 구현되어 있습니다.
+
+		추가됀점. 레이드 계정 저장, 레이드 계정읽기, 계정목록 갱신이 추가되었습니다.
+			그 이유는 계정 추가를 하게 되면은 자동으로 레이드 목록에 갱신이 되지 않기 때문입니다.
+
+		https://www.dropbox.com/s/ybh8hthytd8h4cc/%EB%85%B9%ED%99%94_2016_05_21_02_04_54_226.mp4?dl=1
+		현재 완료된 1차 베타 프로그램입니다.
+
+		아직 버그를 완성하지 않았습니다.
+
+		테스트 하면서 생긴 버그 : 
+			1회 레이드 읽기 는 성공하지만
+			2회 이상일떄는 레이드 읽기 성공하지 못함.
+
+		버그 수정완료. (일시적 이지만 (속도저하 문제))
+
+	GoogleDrive 수정하면서 GoogleFolder를 GoogleFIle와 합쳤습니다.
+	그래서 GoogleFolder를 삭제되고 GoogleFile만 존재합니다.
+
+
+	Library.Cloud.Cloud.Drive 파일과
+	Library.Cloud.Cloud.Upload을 추가하였습니다.
+
+	Drive.cs 파일은 현재 개발중인 GoogleDrive와 추후 추가될 DropBox에 동시에 쓰이는 것을 기술합니다.
+
+	1차 베타 테스트를 할 기술적인 개발은 이미 끝났습니다.
+	그리고 이제 1차 베타 테스트할 추가적인 기능 자동업데이트 기능을 추가합니다.
+
+2016년 6월 4일
+	본격적인 추가적으로 개발 시작.
+
+		프로그램 코드 보수 & 수정 시작.
+			GoogleDrive.cs 파일을 추후
+			DropBox.cs 에 상속이 가능한 클래스인
+			Drive.cs 파일을 생성.
+
+			내부적으로 DriveID 와 해당 Drive가 어느 드라이브 인지 가르키는 DriveName을 2개를 만들었습니다.
+
+			명칭 수정 Library.File.gDrive, 즉 AoiFile.cs 파일 이름을 DriveReader 로 변경
+			gDrive -> DriveReader, AoiFile.cs -> DriveReader.cs 로 변경
+
+			내부 코드 최적화...
+				1. Drive.cs 파일 코드에 Capacity를 추가하여. 드라이브의 용량을 체크가 가능합니다.
+				2. GoogleFile.cs 파일에서 Account 란 부분을 DriveID로 변경되었습니다.
+				3. 기존코드인 ((GoogleDrive)List[DriveID]) 인 부분을 Drive로 한번 거친뒤 GoogleDrive인지 DropBox인지 판별합니다.
+
+
+			기능 추가 시작!
+				Upload 개발시작..
+
+				foreach (object d in List.Values)
+				{
+				    if (((Drive)d).Capacity - ((Drive)d).CapacityUse > fi.Length)
+				    {
+				        if (((Drive)d).DriveName == Library.Global.Global.GoogleDrive)
+				        {
+				            Console.WriteLine("업로드하는중!");
+				            d.Upload(fi.FullName, Root);
+				        }
+				    }
+				}
+
+				이러한 코드를 작성하였습니다. 코드를 요약하자면은 각 드라이브에 있는 잔여 용량을 확인 한뒤
+
+				남은 공간이 존재 할 경우 그 드라이브에 저장하는 원리입니다.
+				하지만 지금 이 코드는 GoogleDrive 일때만 작성이 가능하므로 조금더 일반화가 필요한 시점입니다.
+
+
+6월 30일
+	시험이 끝났습니다.  그 관계로 많은 부분이 개선이 되었습니다.
+	
+		Drive.cs 부분의 소스코드가 일부 변경이 되었습니다.
+
+		기존 코드
+		class Drive
+		{
+			public String DriveID { get; protected set; }
+			public String DriveName { get; protected set; }
+			public long? Capacity { get; protected set; }
+		    public long? CapacityUse { get; protected set; }
+		    public long? Trash { get; protected set; }
+
+		    public bool Upload(string uploadFile, string parent);
+		    public bool Downloade(GoogleFile resource);
+	    }
+
+		class GoogleDrive : Drive 이렇게 사용하던 코드에서
+
+		Dirve.cs 파일의 Drive 클래스의 코드를 바꾸었습니다.
+
+		abstract class Drive
+		{
+			abstract public String DriveID { get; protected set; }
+			abstract public String DriveName { get; protected set; }
+		    abstract public long? Capacity { get; protected set; }
+		    abstract public long? CapacityUse { get; protected set; }
+		    abstract public long? Trash { get; protected set; }
+
+	        abstract public bool Upload(string uploadFile, string parent);
+	        abstract public bool Downloade(GoogleFile resource);
+	    }
+		
+		코드라 변경되었습니다.  그 결과 전에는
+		foreach (object obj in List.Value){ ((GoogleDrive)(obj)).Function(~~~);  }
+		이렇게 비합리적이고, 일반화가 안된 코드를 추상화를 하여 표준화를 시켰습니다.
+
+		foreach (Drive d in List.Value){} 로 바꿈으로써 Drive란 클래스에 맞춰서 개발만 한다면은
+
+		어떤 드라이브든지 적용이 가능하게 개발이 되었습니다.
+
+		여기까지 기능을 개발했습니다.
+
+		지금까지 개발된 기능 : 
+			구글드라이브 객체화
+			
+			수많은 클라우드 계정 한개 처럼 행동하는 레이드 화
+
+			다운로드 기능, 업로드기능등 해당 드라이브의 남은 용량을 알려줍니다.
+
+			해당까지 개발한 프로그램을 2차 베타 프로그램으로 지정하였습니다.
+
+			https://www.dropbox.com/s/27nrfl421v9n21i/ID_ADD.png?dl=1
+			https://www.dropbox.com/s/hkqw5add16213nv/%ED%83%90%EC%83%89%EA%B8%B0.png?dl=1
+
+
+			2차 베타 프로그램 파일
+				https://www.dropbox.com/s/51zahm7se2acrj3/Bin.zip?dl=1
+
+
+2016년 7월 1일
+	디자인 개혁 시작.
+		전에 사용하던 https://github.com/IgnaceMaes/MaterialSkin (Material Skin)을 삭제하고
+		자작 라이브러리로 대체합니다.
+
+		메인폼의 기본 (최초 사이즈)는 (680, 500) 입니다.
+
+		https://www.dropbox.com/s/czdxg7cpfl9vn0z/%EA%B8%B0%EC%A1%B4.png?dl=1
+		기존에 이러했던 디자인을
+
+		https://www.dropbox.com/s/hqkblm4wrgkk37z/Design.png?dl=1
+		이러한 디자인으로 변경중입니다.
+
+		https://www.dropbox.com/s/3w7yfv2y4g5759t/Run%20Design.png?dl=1
+		아직까지는 실행할 경우 이러한 디자인을 나타냅니다.
+
+		https://www.dropbox.com/s/x2ue6ht1os3w76h/Test.mp4?dl=1
+		실제로 테스트 할경우 이러한 결과를 나타냅니다.
+
+		예전에 개발했던 ControlMove와 Screen_Beauty.cs파일을 추가했습니다.
+
+		각 라이브러리는 이와 같은 행동을 합니다.
+
+		ControlMove는 이름만 들어도 이해가 가능합니다.
+		ContorlMove는 Control 값을 넘겨주면 자기가 원하는 위치에 자연스럽고 매끄럽게
+		이동합니다. (사이즈 변경, 로케이션 변경)
+
+		Screen_Beauty는 이름을 변경했습니다. ControlScreen으로 변경했습니다.
+
+		ControlScreen 클래스가 하는 역활은 Control 조종하다 와 Screen 화면 입니다.
+
+		즉 프로그램 폼의 변화를 주는 역활입니다. 독자적인 개발입니다.
+
+		그 결과 https://www.dropbox.com/s/x2ue6ht1os3w76h/Test.mp4?dl=1 언급했던것 처럼
+		프로그램을 Minimize 또는 Close 할 때 ControlScreen이 나오고 버튼 + 을 클릭 했을 때
+		ControlMove 기술이 적용 되었습니다.
+
+
+2016년 7월 2일~ 4일
+	메인폼에 적용되기 위해선 직접적으로 커스텀 버튼을 개발할 필요가 존재 했습니다.
+
+	https://www.dropbox.com/s/szl2jhx08mczxr9/%EC%BA%A1%EC%B2%98_2016_07_04_14_57_55_223.png?dl=1
+
+	이 커스텀 버튼은 Cloud.Menu 에 존재 하고 이 버튼은 하드 접근 & 하드 옵션 변경을 하기 위해 존재합니다.
+
+	https://www.dropbox.com/s/7zy95syj8dw3www/%EC%BA%A1%EC%B2%98_2016_07_02_18_47_38_153.png?dl=1
+	커스텀 버튼을 적용시킨 화면 입니다.
+
+	https://www.dropbox.com/s/urw8osmp0k4jidm/%EC%BA%A1%EC%B2%98_2016_07_04_14_58_08_907.png?dl=1
+	그리고 Image나 다른 것을 이용하지 않고 순순히 Graphic 을 이용하였고, 현재 사용량과
+	총 용량을 비율로 나누어 다른색으로 칠하였습니다.
+
+	https://www.dropbox.com/s/vve7mpfsrnlz33v/%EC%BA%A1%EC%B2%98_2016_07_04_13_05_43_267.png?dl=1
+	그리고 MainForm 에서 GetHard 란 함수를 이용해 모든 하드를 읽어 온뒤 이름 순서대로 강제 정렬합니다.
+
+	https://www.dropbox.com/s/hgry2rj77ywm32o/%EC%BA%A1%EC%B2%98_2016_07_04_13_55_21_694.png?dl=1
+	읽어 온뒤 커스텀 버튼을 더블 클릭 할경우 파일 목록을 이렇게 읽어 오게 됍니다.
+
+	아직 까지 7월 4일 오후 3시 30분에는 탐색기 기능이 완벽하게 구현되지 않았습니다.
+	( 아직까지는 Root 폴더만 탐색이 가능합니다. )
+
+	https://www.dropbox.com/s/h3089njzth0lzea/%EC%BA%A1%EC%B2%98_2016_07_04_15_34_08_591.png?dl=1
+	젤 처음 어떻게 하면은 사람들이 익숙하면서 쉽게 하드 관리를 하는지 판단하기 위해서 부모님& 누나 에게
+	피드백을 받아 구현 되었습니다.
+
+	https://www.dropbox.com/s/143g9xde4bxd3e0/%EC%9D%B5%EC%8A%A4%ED%94%8C%EB%A1%9C%EB%9F%AC%20%EA%B0%9C%EB%B0%9C.mp4?dl=1
+	익스플로러 개발 영상입니다.
+
+	https://www.dropbox.com/s/iygpwjax7yn3kdg/%EC%A0%84%EC%B2%B4%EC%A0%81%20%EC%8A%A4%ED%8E%99.mp4?dl=1
+	7월 4일 까지 현재 오후 3시 30분 까지 개발이 여기까지 되었습니다.
+
+	지금 현재 클라우드 파일을 목록을 읽을 경우 시간이 너무 오래 걸립니다.. (계정 2개일 경우 약 1~2초)
+	그러므로 속도 개선을 위해서 클라우드 안에있는 파일들을 전부다 파일화 하여 DirectoryInfo.GetFiles()로 하여
+	속도를 엄청 빠르게 개선할 생각입니다.
+
+
+2016년 7월 5일
+	과거 7월 4일에 개발을 할때 문제가 되었던 클라우드 파일 목록을 읽기 속도 문제를 해결 하기 위해
+	대안책이 여러가지가 있습니다.
+		1.  Document\Exten Drive\[User]\[Server]\File\모든 파일 경로, 파일 이름
+			이와 같이 한뒤 파일 목록을 요청하면 DirectoryInfo.GetFIles()를 이용하여 개선합니다.
+
+			결과 : 실제로 코딩하여 결과 도출은 성공하였지만 버그가 한개가 생겼습니다.
+				 : 아주 심각한버그 입니다. 그것은 바로 주 개발환경인 Windows 에서 파일 경로 최대 길이가
+
+				 256자 이므로 이 방법을 사용한 경우 오류가 발생하였습니다.
+
+		2. 대응책으로 한가지 방법이 나왔습니다. (이론상 가능하지만.. 비효율적 이지만 가장 확실 한 방법입니다.)
+			[경로]\File\ 란 경로를 가진 [Hard ID] 란 파일에 모든 경로와 그 경로에 따른 파일 목록을 저장한 위치를
+			저장합니다. 그리고 파일목록을 저장한 파일 이름은 랜덤으로 저장이 됩니다.
+
+				파일 목록을 가진 파일 이름이 랜덤으로 되는 사유
+					: 만약 파일 이름을 Path, 경로로 지정할 경우 한가지 문제가 발생합니다. 그 문제는 바로
+					: 첫번째로 개발을 시도 했던것과 비슷한 사유 입니다. 폴더의 갯수가 수천, 수만개가 중첩이 된 경우
+					: 마찬가지로 최대 길이를 벗어나게 되므로 오류가 발생하게 되기 떄문에 파일이름을 차라리 랜덤으로
+					: 하는것이 유용할것 같아 랜덤으로 하게 되었습니다.
+
+			즉. [Hard ID]란 파일은 이렇게 파일이 저장이 됩니다.
+				: Root=3jdijq.dkek
+				: Root\File=kfoEkaow.dls
+
+				
+				해당 기술은 RAIDHard 와 GoogleDrive에 적용되었습니다.
+				
+2016년 7월 6일 ~ 7일
+	CloudMenu(커스텀 컨트롤) 을 개발하기 시작하였습니다.
+		( 이 부분은 디자인개발이 아닌 기술 개발입니다. )
+
+		https://www.dropbox.com/s/wy8jxqz9bs9ijr8/%EC%BA%A1%EC%B2%98_2016_07_08_00_09_10_542.png?dl=1
+		메인 디자인은 다음과 같습니다 하지만 추가, 이름변경 같은것을 택할 경우
+
+		https://www.dropbox.com/s/i35ha1f6nz9mwax/%EC%BA%A1%EC%B2%98_2016_07_08_00_09_18_343.png?dl=1
+		로 변경이 됩니다. (이 부분에서 추가, 이름변경을 택할때 애니메이션 효과가 발생합니다. 그 애니메이션 효과는
+		ControlMove 기술을 사용하였습니다. )
+
+		Graphics g = this.CreateGraphics();
+		Rectangle r = new Rectangle(new Point(0, 0), new Size(101, 121));
+        Rectangle r2 = new Rectangle(new Point(panel1.Location.X - 1, panel1.Location.Y - 1), new Size(panel1.Size.Width + 1, panel1.Size.Height + 1));
+        g.DrawRectangle(new Pen(Brushes.Black, 1), r);
+        g.DrawRectangle(new Pen(Brushes.Black, 1), r2);
+        g.Dispose();
+
+		이 와같이 테두리 색상을 Graphics 을 이용하여 직접적으로 그림을 그렸습니다.
+
+		CloudMenu(커스텀 컨트롤)에서 하드추가, 하드 이름 변경을 하였을 경우
+
+		값이 변경되었음을 알리는 이벤트 핸들러를 추가하였습니다. 그 이벤트는 CreateHard 에 되어있고
+		반환값은 object, bool 입니다.
+
+		즉 하드가 새로 생겼거나 이름이 변경되었음을 알리기 위해 CreateHard란 이벤트가 발생합니다.
+
+		그 이벤트는 MainForm에서 받고 처리를 합니다.
+
+
+2016년 7월 9일
+	https://www.dropbox.com/s/xzb3wqswbbdybq3/%EB%85%B9%ED%99%94_2016_07_09_02_38_38_855.mp4?dl=1
+	현재 작업은 이와 같습니다.
+
+	지금 추가 개발할려는것은 바로 계정 추가 기술을 개발할려고 합니다.
+
+	수정 사항은 많아 졌습니다.
+	하지만은 버그 또한 그만큼 많이 생겼습니다.
+	제일먼저 7월 6일~7일 날에 개발을 했떤 커스텀 컨트롤 인 CloudMenu 란 컨트롤은
+	오직 Hard 란 것을 추가 & 삭제 & 이름 변경을 하기 위해 존재하는 버튼입니다.
+	그리고 추후에 사용할 Account 관리에 비효율적이고 다시 재구성하기에는 너무 많은 비용과 코드의 복잡성이 늘어 날것 같아
+	그냥 새롭게 하나 만들었습니다.
+	디자인은 다음 아래 사진과 같습니다.
+
+	https://www.dropbox.com/s/m6qi0y8sp9k1rqw/%EC%BA%A1%EC%B2%98.PNG?dl=1
+
+	추가를 클릭시 이와 같이 ControlMove 효과가 발생합니다. ID 입력 을 하실수가 있습니다.
+	그리고 Google Drive와 Drop Box 이 두개를 선택이 가능하지만 아직까지 Drop Box 를 구현하지 않아 Dropbox를 택하더라도
+	실행은 되지 않습니다.
+
+	https://www.dropbox.com/s/fp24sinbruzhn9n/%EC%BA%A1%EC%B2%982.PNG?dl=1
+
+	현재 이 코드가 CloudMenu2 버튼의 총 코드 입니다.
+	이벤트 핸들러 1개와 그에 해당하는 작업들을 처리하는 코드들입니다.
+
+	https://www.dropbox.com/s/bzwvghaebccoynz/%EC%BA%A1%EC%B2%983.PNG?dl=1
+
+	해당 이 코드는 버그를 고친뒤의 코드입니다. 여기서 추가된 것은 바로
+
+	AccountWrite입니다.
+	추가된 사유는 아래와 같습니다.
+
+	https://www.dropbox.com/s/cp192o3fxepvnwg/%EC%BA%A1%EC%B2%984.PNG?dl=1
+
+	아래의 CloudMenu2 ( Account Menu ) 에서 작업할때 쓰이는 버튼 이벤트입니다.
+	여기서 AddAcount에서
+
+	https://www.dropbox.com/s/9tehcn06zxcaus7/%EC%BA%A1%EC%B2%985.PNG?dl=1
+
+	(위 사진은 구버전일때 사진입니다.)
+	여기서 일반적으로 Write를 하게 될 경우에는
+
+	https://www.dropbox.com/s/qm4f6iv039csvb8/%EC%BA%A1%EC%B2%986.PNG?dl=1
+
+	이와 같이 ToString() 을 하게 되면 그 해당 클래스의 네임스페이스와 포함된 이름으로
+	출력을 하게 되므로 문제가 발생하였습니다.
+	그래서 그의 문제를 해결하기 위해 새로운 코드를 작성하였습니다. 바로
+
+	https://www.dropbox.com/s/8rjpqf3xwtgvkcq/%EC%BA%A1%EC%B2%987.PNG?dl=1
+
+	AccountWrite 란 메소드입니다.
+	이 메소드는 일반적인 Write 메소드와 다른점은 바로
+	해당 변수가 어떤 클라우드인지 판단한뒤 새롭게 재구성하는 기능을 가졌습니다.
+	현재까지의 기능은 이렇습니다.
+	그리고 다른 부분을 말하자면
+	Exten Drive의 파일 내부 구조를 알려드립니다.
+
+	https://www.dropbox.com/s/635vpnsmjiu2wen/%EC%BA%A1%EC%B2%988.PNG?dl=1
+
+	제일먼저 Documents인 내 문서 파일에 Exten Drive 란 폴더를 생성합니다
+	(하지만 아직까지 Exetensa Drive 로 표현되는것은 아직까지 수정하지 않았기 때문입니다. )
+
+	https://www.dropbox.com/s/abbtn0dtzaprg0m/%EC%BA%A1%EC%B2%989.PNG?dl=1
+
+	해당 폴더에 들어가게 되면 Drive란 폴더가 있습니다.
+	추후 User 란폴더와 Server폴더가 추가한뒤 서버와 연동시킬것입니다.
+
+	https://www.dropbox.com/s/lhgupgers807khc/%EC%BA%A1%EC%B2%9810.PNG?dl=1
+
+	들어가게 되면 총 4개의폴더가 있습니다.
+	각각
+
+	https://www.dropbox.com/s/e7h0rt78c4piz24/11.PNG?dl=1
+
+	이 폴더는 파일이름이 Hard의 이름이고 해당 파일 내부에 적힌 내용이 하드 안에
+	어떤 클라우드가 존재하는지가 기입되어져있습니다.
+
+	https://www.dropbox.com/s/kl7ls32keoxdtp9/12.PNG?dl=1
+
+	해당 폴더는 File 이란 폴더에서는
+
+	이와 같이 Account 이름으로된 단일 파일은 Root 폴더의 파일 목록이 적혀있고
+	^List는 그 폴더 목록의 파일이름 랜덤으로 적혀있습니다.
+
+	https://www.dropbox.com/s/yth4rgkpp7tuibq/13.PNG?dl=1
+
+	이와 같이 말이죠
+	즉
+	
+	Account 이름으로 되어져 있는 단일 파일은 내부에 이렇게 기입되어져 있습니다.
+	
+	Root=djeEIe.ekd
+	Root\aaa=kAoq012d.akso
+
+	그리고 ^List 폴더 안에 있는 파일 들은 이렇게 구성되어져 있습니다.
+
+	[FileName]=GoogleFile 클래스가 직렬화 되어있습니다.
+	
+	이렇게 구성되어져 있습니다.
+
+	https://www.dropbox.com/s/rtmklhom20zwc7i/14.PNG?dl=1
+
+	이 Account는 File과 다르게 폴더 목록이 적혀있습니다.
+
+	이상으로 마치겠습니다.
+
+	https://www.dropbox.com/s/f9lnz9ihpws7c1z/15.PNG?dl=1
+
+	사진이 아마도 한장 밀렸나 봅니다.
+
+	자세한 사항은 http://extensa.tistory.com/19 란 사이트에 존재합니다.
+
+
+2016년 7월 10일
+	한건 정말로 별로 없겠지만 오류 수정할려고 시도했습니다.
+
+	오류 발견한점 : 
+		구글 드라이브 연동하기위해 인증 요청할때 취소하게 되면 강제로 프로그램이 죽는 현상이 발견하였습니다.
+
+	총 2가지의 버그를 발견하였고 이 버그를 해결하기 위해 약 12시간이 넘는 시간을 보냈지만 여전히 해결이 불가능했습니다.
+		시도해본 방법 : 
+			
+			1. await 와 async 를 이용하여 비 동기화 작업을 하여 값을 가져옵니다.
+				(만약 오류가 발생하더라도 비동기 작업이므로 메인 작업에는 크게 영향이 없을게 뻔하니까...?)
+
+			2. Thread 작업을 통하여 비동기 작업을 시도하였습니다.
+
+			3. BackgroundWork를 이용하여 비동기 작업을 시도하였습니다.
+
+			4. 새로운 프로젝트를 생성하여 Proccess.Start를 이용하여 TimeOut 시간을 정하여
+				MemoryMappedFile 특정 파일이 존재할 경우 정상적으로 처리된 경우로 판단, 파일이 존재하지 않을경우
+				해당 프로세스를 강제종료 하는 방식
+
+			모든 이 과정을 시도하였지만 실패하였습니다.
+
+2016년 7월 11일
+	학교에서 왜 이런 버그가 존재하고 왜 이렇게 되는지를 생각하였습니다.
+
+		결론 : 
+			GetAccount 와 GetHard 목록을 읽어 오는게 비정상적으로 많이 발생합니다.
+			그 결과 메인 프로세스가 죽지 않도록 비동기화 작업을 걸어 주게 되면은
+
+			이런 사태가 발생하게 됩니다.
+			
+			계정추가 할경우 :
+				계정추가 요청! -> 새롭게 계정추가 작업 (비동기 작업)
+				               -> 계정 목록 갱신시도 -> Hard 초기화 -> GetAccountList 이벤트 발생 -> 다시 GoogleDrive Auth 인증 시도
+
+				이러한 경우를 거치게 되면서 계정 목록 갱신시도에서 한번더 Auth를 요청하게 됩니다.
+
+				그러므로 젤 처음 MainForm_Load 할 때 딱 한번 완벽하게 모든 하드, 모든 계정을 한번에 읽어 옵니다.
+
+				그 이후에는 더 이상읽지 안도록 개발을 합니다.
+
+
+2016년 7월 16일
+	젤 처음 메인폼에서만 로드하는 계획은 성공하였고 함수가 추가된점이 있습니다.
+
+	https://www.dropbox.com/s/vb6fb7yd84nhknp/ice_screenshot_20160718-234624.png?dl=1
+
+	코드의 구조는 이렇게 변경이 되었습니다. 
+
+	젤 처음 프로그램을 켰을떄 실행되는 코드 MainForm_FirstGetHard();
+
+	그리고 추후 나중에 AddAccount 나 DelAccount, NameChange 같은 이벤트가 발생했을때 처리되는 MainForm_NewGetHard();
+
+	나머지 MainForm_GetHard 나 MainForm_GetAccount 같은 경우에는 listHard[TaskIndex].GetAccount 또는 폴더 목록을 가져오는 역활을 합니다.
+
+	https://www.dropbox.com/s/w3q8v8gh3thgjpd/ice_screenshot_20160718-234649.png?dl=1
+
+	MainForm_FirstGetHard 는 이와같이 전 코드 GetHard 와 동일합니다.
+
+	https://www.dropbox.com/s/i0ec3dbsvizm5y6/ice_screenshot_20160718-234707.png?dl=1
+
+	MainForm_GetAccount는 listHard[TaskIndex].GetAccount(); 만을 하는 단순화가 되었습니다.
+	https://www.dropbox.com/s/l4yat591cwiubvn/ice_video_20160719-021700.webm?dl=1
+
+	프로그램은 이와같이 동일한 작업을 보여줍니다.
+
+
+2016년 7월 17일
+	N 드라이브 (네이버 클라우드 개발 시작)
+	
+	네이버 RSA 로그인을 하기 위해서 참고 문헌 1.3 을 참조.
+	위의 라이브러리를 사용하 였고. 본 프로그램은 GPL 라이센스를 따릅니다. 프로그램이 완성이 되었을때 Git Hub에 GPL로 코드를 배포할것입니다.
+
+	https://www.dropbox.com/s/8afusd717q7a68t/ice_video_20160721-114036.webm?dl=1
+
+	이와 동영상 처럼 업로드 & 다운로드가 되었을때 값의 변경을 체크하여 어떤 변화가 일어나는지 확인하였습니다.
+
+	Library.Cloud.CLoud.Naver 란 폴더에 NaverCloud.cs 파일이 존재합니다.
+
+	그리고 Libarary.Cloud.Cloud.Drive.cs 파일에 파생된 클래스입니다.
+
+	참조문헌 1.3 을 이용하여 네이버 RSA 로그인을 구현하였고 결과 처리를 하였습니다.
+
+	그리고 이와 같은 로그인 방식은 특정 시간이 지나면은 연결이 끊어지므로 10분 간격으로 로그인 세션을 재활성화 합니다.
+	( 네이버는 15분 간격으로 세션을 변경합니다. )
+	(차이를 준 이유는 15분으로 하게 될경우 로그인 걸리는 시간 3~5초 안에 프로그램 요청을 하게 될경우 에러가 발생하기 떄문!)
+
+	https://www.dropbox.com/s/9zw48h8ynqs8fze/ice_screenshot_20160721-120704.png?dl=1
+
+	네이버 로그인 클래스는 이와 같이 구현되었습니다.
+
+	https://www.dropbox.com/s/9zw48h8ynqs8fze/ice_screenshot_20160721-120704.png?dl=1
+
+	네이버 동기화는 이렇게 Threading.Thraed.Sleep(1000 * 60 * 10); 으로 10분간격으로 세션 활성합니다.
+
+	네이버 클라우드를 파싱하기 위해서 노력이 필요 합니다...
+
+
+
+2017년 7월 21일
+	(앞에 개발했던.. 네이버 클라우드 목록 값읽어오기와, 파일 다운로드, 업로드는 이미 파싱에 성공하였습니다.)
+	
+	이제 파일 용량과 파일 삭제를 구현하면 됩니다..
+
+	파일 목록은 로그인된 세션값으로 https://cloud.naver.com/mycapacity.nhn?openerType=main 에 접속하여
+
+	사용중 : 용량과 GB 용량을 가져올 생각입니다. 이 것은 구글과 다르게 직접적으로 지원을 하므로.. CapacityManager 클래스를
+	사용할 필요가 없습니다.
+
+	새로운 클래스가 필요해짐.. 특정 문자를 추출해야하므로.. Ex)
+
+	파싱을 할경우 네이버 클라우드 용량이 얼마인지 판단을 하기 위해서  <h3  ckass="blind">사용 용량</h3> 와같은 특정 문자열을 파싱하여
+	이 클라우드 용량이 얼마 용량이 있는지 판단이 필요합니다.
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+새로운 프로젝트에서 코드를 알기 쉽게 변환작업중
+
+2017. 03. 12.
+개발시작, 기존에 있던 자료 정리 하기 시작함.
+
+
+
+
+
+
+
+
+
+
